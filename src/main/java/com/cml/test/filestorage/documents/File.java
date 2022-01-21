@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * File document class. Stores file name and size.
@@ -26,5 +26,5 @@ public class File {
     private String name;
     @Min(value = 0, message = "File size can not be negative")
     private int size;
-    private ArrayList<String> tags;
+    private List<String> tags;
 }

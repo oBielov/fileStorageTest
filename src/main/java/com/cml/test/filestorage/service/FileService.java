@@ -36,7 +36,7 @@ public class FileService {
         return new SaveResponse(file.getId());
     }
 
-    @SneakyThrows
+
     public Response deleteFile(String id){
         File file = getFileById(id);
         log.info("File " + file.getName() + " found");
@@ -45,7 +45,7 @@ public class FileService {
         return new OkResponse(true);
     }
 
-    @SneakyThrows
+
     public Response addTags(TagsData data){
         File file = getFileById(data.getId());
         log.info("File " + file.getName() + " found");
@@ -105,7 +105,7 @@ public class FileService {
         throw new TagsNotFoundException("Tags not found on a file!");
     }
 
-   /*Get file type by its extension. Returns "application/octet-stream" if file type unknown */
+   /*Get file MIME type by its extension. Returns "application/octet-stream" if file type unknown */
     private String getFileType(String name){
         Tika tika = new Tika();
         return tika.detect(name);
