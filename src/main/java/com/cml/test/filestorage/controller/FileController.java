@@ -64,7 +64,7 @@ public class FileController {
 
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<Response> handleNotFoundException() {
-        return new ResponseEntity<>(new BadResponse(false,"File not found"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new BadResponse(false,"File not found"), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TagsNotFoundException.class)
