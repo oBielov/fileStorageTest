@@ -37,7 +37,7 @@ Requires @RequestBody:\
    "id": "file id"\
    "tags" : ["tag1", "tag2", ...]\
 }\
-Returns error 404 if file with such id not found
+Returns error 404 if file with such id not found\
 Returns error 400 if tags in file does not exists
 
 ### GET "file/"
