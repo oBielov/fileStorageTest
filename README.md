@@ -44,7 +44,7 @@ Returns error 400 if tags in file does not exists
 Get page of files from Elasticsearch DB. Has some optional parameters:
 ##### file/?tags=tag1, tag2, tag3  — filter files by tags (exact coincidence);
 ##### file/?page=1&size=5 — paginagion parameters. Number of page (page) and quantity of elements displayed (size). Default parameters are page = 0, size = 10;
-##### file/?q=ta — When exists apply a search over file name. So all files that have "ta" pattern in file nime will be returned.
+##### file/?q=ta — When exists apply a search over file name. So all files that have "ta" pattern in file name will be returned.
 
 ##Application parameters
 
