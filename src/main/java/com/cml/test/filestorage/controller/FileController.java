@@ -5,6 +5,7 @@ import com.cml.test.filestorage.service.FileService;
 import com.cml.test.filestorage.service.domain.data.TagsData;
 import com.cml.test.filestorage.service.domain.exceptions.TagsNotFoundException;
 import com.cml.test.filestorage.service.domain.response.BadResponse;
+import com.cml.test.filestorage.service.domain.response.FileListResponse;
 import com.cml.test.filestorage.service.domain.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 @RestController
 @Validated
@@ -46,6 +47,14 @@ public class FileController {
     @DeleteMapping("/{id}/tags")
     public ResponseEntity<Response> deleteTags(@RequestBody TagsData data){
         return new ResponseEntity<>(service.deleteTags(data), HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public ResponseEntity<FileListResponse> getAll(@RequestParam(required = false) List<String> tags,
+                                                   @RequestParam(defaultValue = "0", required = false) int page,
+                                                   @RequestParam(defaultValue = "10", required = false) int size,
+                                                   @RequestParam(required = false) String q){
+        return new ResponseEntity<>(service.getList(tags, page, size, q), HttpStatus.OK);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

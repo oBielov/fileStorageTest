@@ -1,17 +1,20 @@
 package com.cml.test.filestorage.repository;
 
 import com.cml.test.filestorage.documents.File;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public interface FileRepository extends ElasticsearchRepository<File, Long> {
 
-    public void deleteFileById(String id);
+    Optional<File> findFileById(String id);
 
-    public Optional<File> findFileById(String id);
+    Page<File> findAllByNameContains(String pattern, Pageable pageable);
 
-    public ArrayList<File> findAllByNameContains(String pattern);
+    Page<File> findAllByTagsIn(List<String> tags, Pageable pageable);
+
+    Page<File> findAll(Pageable pageable);
 
 }

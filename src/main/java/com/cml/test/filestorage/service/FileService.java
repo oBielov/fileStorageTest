@@ -4,18 +4,15 @@ import com.cml.test.filestorage.documents.File;
 import com.cml.test.filestorage.repository.FileRepository;
 import com.cml.test.filestorage.service.domain.data.TagsData;
 import com.cml.test.filestorage.service.domain.exceptions.TagsNotFoundException;
-import com.cml.test.filestorage.service.domain.response.BadResponse;
-import com.cml.test.filestorage.service.domain.response.OkResponse;
-import com.cml.test.filestorage.service.domain.response.Response;
-import com.cml.test.filestorage.service.domain.response.SaveResponse;
+import com.cml.test.filestorage.service.domain.response.*;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -58,8 +55,42 @@ public class FileService {
         return new OkResponse(true);
     }
 
-    public ArrayList<File> getAll(String pattern){
-        return repository.findAllByNameContains(pattern);
+    public FileListResponse getList(List<String> tags, int page, int size, String q){
+        if(tags != null){
+            return getByTags(tags, page, size);
+        }
+        if(q != null){
+            return getByNameContains(q, page, size);
+        }
+        return getAll(page, size);
+    }
+
+
+    private FileListResponse getByNameContains(String pattern, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<File> filePage = repository.findAllByNameContains(pattern, pageable);
+        return FileListResponse.builder()
+                .total(filePage.getTotalElements())
+                .page(filePage.getContent())
+                .build();
+    }
+
+    private FileListResponse getByTags(List<String> tags, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<File> filePage = repository.findAllByTagsIn(tags, pageable);
+        return FileListResponse.builder()
+                .total(filePage.getTotalElements())
+                .page(filePage.getContent())
+                .build();
+    }
+
+    private FileListResponse getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<File> filePage = repository.findAll(pageable);
+        return FileListResponse.builder()
+                .total(filePage.getTotalElements())
+                .page(filePage.getContent())
+                .build();
     }
 
     @SneakyThrows
