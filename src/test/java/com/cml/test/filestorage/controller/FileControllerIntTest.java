@@ -5,6 +5,7 @@ import com.cml.test.filestorage.documents.File;
 import com.cml.test.filestorage.service.FileService;
 import com.cml.test.filestorage.service.domain.response.BadResponse;
 import com.cml.test.filestorage.service.domain.response.OkResponse;
+import com.cml.test.filestorage.service.domain.response.SaveResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,7 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import java.util.UUID;
-
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(FileController.class)
@@ -26,11 +26,11 @@ class FileControllerIntTest {
 
     @Test
     void ReturnOkResponseWhenSaveValidFile(){
-        when(service.saveFile(new File(UUID.randomUUID().toString(),
+        File file = new File(UUID.randomUUID().toString(),
                 "doc.txt",
                 125,
-                List.of("testTag"))))
-                .thenReturn(new OkResponse(true));
+                List.of("testTag"));
+        when(service.saveFile(file)).thenReturn(new SaveResponse(file.getId()));
     }
 
     @Test
@@ -39,6 +39,14 @@ class FileControllerIntTest {
                 "doc.txt",
                 -120,
                 List.of("testTag")))).thenReturn(new BadResponse(false, "File size can not be negative"));
+    }
+
+    @Test
+    void ReturnBadResponseWhenSaveFileWithBlankName(){
+        when(service.saveFile(new File(UUID.randomUUID().toString(),
+                "",
+                120,
+                List.of("testTag")))).thenReturn(new BadResponse(false, "File name can not be blank"));
     }
 
     @Test
